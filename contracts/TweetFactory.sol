@@ -14,10 +14,11 @@ contract TweetFactory {
     mapping(uint256 => address) public tweeters;
 
     /**
-     * @dev Create a new tweet.
+     * @dev Creates a new tweet.
      * @param _content The content of the tweet.
      */
     function createTweet(string memory _content) public {
+        require(bytes(_content).length != 0, "Tweet content cannot be empty.");
         tweets.push(
             Tweet(_content, uint32(block.timestamp), msg.sender, false)
         );
@@ -26,6 +27,7 @@ contract TweetFactory {
 
     /**
      * @dev Returns all tweets.
+     * @return tweets The array of tweets.
      */
     function getTweets() public view returns (Tweet[] memory) {
         return tweets;

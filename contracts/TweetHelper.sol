@@ -5,23 +5,39 @@ import "./TweetFactory.sol";
 
 contract TweetHelper is TweetFactory {
     /**
-     * @dev Edit a tweet.
+      @dev Checks if the tweetId is valid.
+      @param _tweetId The id of the tweet.
+     */
+    modifier validTweetId(uint256 _tweetId) {
+        require(
+            _tweetId < tweets.length && _tweetId >= 0,
+            "Tweet id is invalid."
+        );
+        _;
+    }
+
+    /**
+     * @dev Edits a particular tweet.
      * @param _tweetId The id of the tweet to edit.
      * @param _content The new content of the tweet.
      */
-    function editTweet(uint256 _tweetId, string memory _content) public {
+    function editTweet(uint256 _tweetId, string memory _content)
+        public
+        validTweetId(_tweetId)
+    {
         require(
             msg.sender == tweeters[_tweetId],
             "You cannot edit this tweet."
         );
+        require(bytes(_content).length != 0, "Tweet content cannot be empty.");
         tweets[_tweetId].content = _content;
     }
 
     /**
-     * @dev Delete a tweet.
-     * @param _tweetId The id of the tweet to delete.
+     * @dev Deletes a particular tweet.
+     * @param _tweetId The id of the tweet to be deleted.
      */
-    function deleteTweet(uint256 _tweetId) public {
+    function deleteTweet(uint256 _tweetId) public validTweetId(_tweetId) {
         require(
             msg.sender == tweeters[_tweetId],
             "You cannot delete this tweet."
@@ -31,18 +47,24 @@ contract TweetHelper is TweetFactory {
     }
 
     /**
-     * @dev Returns a tweet.
-     * @param _tweetId The id of the tweet to return.
+     * @dev Returns the non-deleted tweet.
+     * @param _tweetId The id of the tweet.
+     * @return (string, uint256, address) The non-deleted tweet.
      */
     function getTweet(uint256 _tweetId)
         public
         view
+        validTweetId(_tweetId)
         returns (
             string memory,
-            uint32,
+            uint256,
             address
         )
     {
+        require(
+            tweets[_tweetId].deleted == false,
+            "This tweet has been deleted."
+        );
         return (
             tweets[_tweetId].content,
             tweets[_tweetId].timestamp,
@@ -52,6 +74,7 @@ contract TweetHelper is TweetFactory {
 
     /**
      * @dev Returns the total count of tweets including deleted ones.
+     * @return uint256 The total number of tweets.
      */
     function getTweetCount() public view returns (uint256) {
         return tweets.length;
@@ -59,6 +82,7 @@ contract TweetHelper is TweetFactory {
 
     /**
      * @dev Returns all un-deleted tweets.
+     * @return Tweet The array of tweets.
      */
     function showTweets() public view returns (Tweet[] memory) {
         Tweet[] memory result;
