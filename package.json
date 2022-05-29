@@ -4,7 +4,10 @@
   "description": "A lite version of twitter based on solidity smart contracts",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "coverage": "npx hardhat coverage",
+    "deploy:rinkeby": "npx hardhat scripts/deploy.js --network rinkeby"
   },
   "repository": {
     "type": "git",
