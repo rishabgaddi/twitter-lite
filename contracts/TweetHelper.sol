@@ -55,20 +55,19 @@ contract TweetHelper is TweetFactory {
         public
         view
         validTweetId(_tweetId)
-        returns (
-            string memory,
-            uint256,
-            address
-        )
+        returns (Tweet memory)
     {
         require(
             tweets[_tweetId].deleted == false,
             "This tweet has been deleted."
         );
         return (
-            tweets[_tweetId].content,
-            tweets[_tweetId].timestamp,
-            tweeters[_tweetId]
+            Tweet(
+                tweets[_tweetId].content,
+                tweets[_tweetId].timestamp,
+                tweets[_tweetId].author,
+                tweets[_tweetId].deleted
+            )
         );
     }
 
@@ -78,19 +77,5 @@ contract TweetHelper is TweetFactory {
      */
     function getTweetCount() public view returns (uint256) {
         return tweets.length;
-    }
-
-    /**
-     * @dev Returns all un-deleted tweets.
-     * @return Tweet The array of tweets.
-     */
-    function showTweets() public view returns (Tweet[] memory) {
-        Tweet[] memory result;
-        for (uint256 i = 0; i < tweets.length; i++) {
-            if (!tweets[i].deleted) {
-                result[i] = tweets[i];
-            }
-        }
-        return result;
     }
 }
