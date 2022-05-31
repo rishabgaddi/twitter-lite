@@ -6,10 +6,16 @@ describe("TweetFactory Smart Contract", function () {
   let TweetFactory;
   let tweetFactory;
   let user1, user2;
+
   beforeEach(async function () {
     TweetFactory = await ethers.getContractFactory("TweetFactory");
     [user1, user2] = await ethers.getSigners();
     tweetFactory = await TweetFactory.deploy();
+  });
+
+  it("Tweet count should be 0 when no tweets are created", async function () {
+    const tweets = await tweetFactory.getTweets();
+    expect(tweets.length).to.equal(0);
   });
 
   it("User 1 can create a Tweet", async function () {

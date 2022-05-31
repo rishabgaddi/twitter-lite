@@ -14,9 +14,6 @@ describe("TweetHelper Smart Contract", function () {
   });
 
   it("Tweet count should be 0 when no tweets are created", async function () {
-    const tweets = await tweetHelper.getTweets();
-    expect(tweets.length).to.equal(0);
-
     const tweetCount = await tweetHelper.getTweetCount();
     expect(tweetCount).to.equal(0);
   });
@@ -52,6 +49,7 @@ describe("TweetHelper Smart Contract", function () {
 
     const tweet = await tweetHelper.getTweet(0);
     expect(tweet.content).to.equal("Hello, This is my first tweet.");
+    expect(tweet.author).to.equal(user1.address);
 
     const tweetCount = await tweetHelper.getTweetCount();
     expect(tweetCount).to.equal(2);
@@ -125,6 +123,7 @@ describe("TweetHelper Smart Contract", function () {
 
     const tweet = await tweetHelper.getTweet(0);
     expect(tweet.content).to.equal("Hello, This is my first tweet.");
+    expect(tweet.author).to.equal(user1.address);
   });
 
   it("User cannot delete a tweet that does not exist", async function () {

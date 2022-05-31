@@ -49,7 +49,7 @@ contract TweetHelper is TweetFactory {
     /**
      * @dev Returns the non-deleted tweet.
      * @param _tweetId The id of the tweet.
-     * @return (string, uint256, address) The non-deleted tweet.
+     * @return Tweet The non-deleted tweet.
      */
     function getTweet(uint256 _tweetId)
         public
